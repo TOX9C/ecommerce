@@ -2,13 +2,19 @@ import prisma from "../prisma_client";
 import { Request, Response } from "express";
 
 const make = async (req: Request, res: Response): Promise<Response> => {
-  const { name, category, price } = req.body;
+  const { name, category, price, description, urls } = req.body;
   try {
     const newProduct = await prisma.product.create({
       data: {
         name,
+        description,
         category,
         price,
+        ProductImages: {
+          create: urls.map((url: String) => {
+            url;
+          }),
+        },
       },
     });
     return res.json({ message: name + " is added" });
@@ -19,7 +25,7 @@ const make = async (req: Request, res: Response): Promise<Response> => {
 };
 
 const update = async (req: Request, res: Response): Promise<Response> => {
-  const { id, name, price, category } = req.body;
+  const { id, name, price, category, description, urls } = req.body;
   try {
     await prisma.product.update({
       where: {
@@ -29,6 +35,12 @@ const update = async (req: Request, res: Response): Promise<Response> => {
         name,
         price,
         category,
+        description,
+        ProductImages: {
+          update: urls.map((url: String) => {
+            url;
+          }),
+        },
       },
     });
     return res.json({ message: name + " has been updated" });
@@ -55,7 +67,7 @@ const get = async (req: Request, res: Response): Promise<Response> => {
 
 const search = async (req: Request, res: Response): Promise<Response> => {
   const { search } = req.query;
-  const searchQuery = typeof search === 'string' ? search : '';
+  const searchQuery = typeof search === "string" ? search : "";
   try {
     const items = await prisma.product.findMany({
       where: {
@@ -70,9 +82,12 @@ const search = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-const searchCategory = async (req: Request, res: Response): Promise<Response> => {
+const searchCategory = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const { category } = req.query;
-  const categoryQuery = typeof category === 'string' ? category : '';
+  const categoryQuery = typeof category === "string" ? category : "";
   try {
     const items = await prisma.product.findMany({
       where: { category: { contains: categoryQuery } },

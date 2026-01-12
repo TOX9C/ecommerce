@@ -16,14 +16,24 @@ model User {
 }
 
 model Product {
-    id         Int         @id @default(autoincrement())
-    name       String
-    category   String
-    price      Int
-    created_at DateTime    @default(now())
-    available  Boolean     @default(true)
-    cartItems  CartItem[]
-    orderItems OrderItem[]
+    id            Int            @id @default(autoincrement())
+    name          String
+    category      String
+    description   String
+    imgUrl        String[]
+    price         Int
+    created_at    DateTime       @default(now())
+    available     Boolean        @default(true)
+    cartItems     CartItem[]
+    ProductImages ProductImage[]
+    orderItems    OrderItem[]
+}
+
+model ProductImage {
+    id        Int     @id @default(autoincrement())
+    url       String
+    product   Product @relation(fields: [productId], references: [id])
+    productId Int
 }
 
 model Cart {
