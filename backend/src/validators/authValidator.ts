@@ -20,6 +20,13 @@ export const registerSchema = z.object({
         .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
         .regex(/[a-z]/, "Password must contain at least one lowercase letter")
         .regex(/[0-9]/, "Password must contain at least one number"),
+    phoneNumber: z
+        .string()
+        .min(10, "Phone number must be at least 10 digits")
+        .regex(/^[0-9]+$/, "Phone number must contain only numbers"),
+    street: z.string().min(3, "Street address is required"),
+    city: z.string().min(2, "City is required"),
+    town: z.string().min(2, "Town is required"),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

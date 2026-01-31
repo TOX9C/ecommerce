@@ -78,7 +78,11 @@ const getCart = async (req: AuthRequest, res: Response): Promise<Response> => {
       include: {
         item: {
           include: {
-            product: true,
+            product: {
+              include: {
+                ProductImages: true,
+              },
+            },
           },
         },
       },

@@ -2,7 +2,7 @@ import prisma from "../prisma_client";
 import { Request, Response } from "express";
 
 const make = async (req: Request, res: Response): Promise<Response> => {
-  const { name, category, price, description, urls } = req.body;
+  const { name, category, price, description, imgUrl } = req.body;
   try {
     const newProduct = await prisma.product.create({
       data: {
@@ -11,9 +11,9 @@ const make = async (req: Request, res: Response): Promise<Response> => {
         category,
         price,
         ProductImages: {
-          create: urls.map((url: String) => {
-            url;
-          }),
+          create: imgUrl.map((url: string) => ({
+            url,
+          })),
         },
       },
     });
@@ -25,7 +25,7 @@ const make = async (req: Request, res: Response): Promise<Response> => {
 };
 
 const update = async (req: Request, res: Response): Promise<Response> => {
-  const { id, name, price, category, description, urls } = req.body;
+  const { id, name, price, category, description, imgUrl } = req.body;
   try {
     await prisma.product.update({
       where: {
@@ -37,9 +37,10 @@ const update = async (req: Request, res: Response): Promise<Response> => {
         category,
         description,
         ProductImages: {
-          update: urls.map((url: String) => {
-            url;
-          }),
+          deleteMany: {},
+          create: imgUrl.map((url: string) => ({
+            url,
+          })),
         },
       },
     });
@@ -51,12 +52,18 @@ const update = async (req: Request, res: Response): Promise<Response> => {
 };
 
 const get = async (req: Request, res: Response): Promise<Response> => {
+  const { limit } = req.query;
+  const take = limit ? parseInt(limit as string, 10) : 15;
+
   try {
     const items = await prisma.product.findMany({
+      include: {
+        ProductImages: true,
+      },
       orderBy: {
         created_at: "desc",
       },
-      take: 15,
+      take: take,
     });
     return res.json({ items });
   } catch (error) {
@@ -70,6 +77,9 @@ const search = async (req: Request, res: Response): Promise<Response> => {
   const searchQuery = typeof search === "string" ? search : "";
   try {
     const items = await prisma.product.findMany({
+      include: {
+        ProductImages: true,
+      },
       where: {
         name: { contains: searchQuery },
       },
@@ -90,6 +100,9 @@ const searchCategory = async (
   const categoryQuery = typeof category === "string" ? category : "";
   try {
     const items = await prisma.product.findMany({
+      include: {
+        ProductImages: true,
+      },
       where: { category: { contains: categoryQuery } },
       take: 10,
     });
@@ -105,6 +118,9 @@ const getById = async (req: Request, res: Response): Promise<Response> => {
   const productId = Array.isArray(id) ? id[0] : id;
   try {
     const product = await prisma.product.findUnique({
+      include: {
+        ProductImages: true,
+      },
       where: { id: parseInt(productId, 10) },
     });
     if (!product) {
@@ -117,4 +133,18 @@ const getById = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export default { make, update, get, search, searchCategory, getById };
+const remove = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
+  const productId = Number(id);
+  try {
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+    return res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Product delete error:", error);
+    return res.status(500).json({ message: "Failed to delete product" });
+  }
+};
+
+export default { make, update, get, search, searchCategory, getById, remove };

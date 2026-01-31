@@ -3,9 +3,11 @@ import { Request, Response, NextFunction } from "express";
 
 interface JWTPayload {
   id: number;
+  role: string;
+  username: string;
 }
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: JWTPayload;
 }
 
