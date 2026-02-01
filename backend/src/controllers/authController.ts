@@ -30,11 +30,9 @@ const register = async (req: Request, res: Response): Promise<Response> => {
   // Better to add manual validation here or use the schema.
   const { username, password, phoneNumber, street, city, town } = req.body;
   try {
-    // Validate using Zod manually for now to ensure safety
-    const validation = registerSchema.safeParse(req.body);
-    if (!validation.success) {
-      return res.status(400).json({ message: "Validation error", errors: validation.error.format() });
-    }
+    // Validation is handled by middleware
+    // const validation = registerSchema.safeParse(req.body);
+    // if (!validation.success) { ... }
 
     const user = await prisma.user.findFirst({
       where: {

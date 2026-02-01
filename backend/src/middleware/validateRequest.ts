@@ -15,8 +15,9 @@ export const validate = (schema: ZodSchema, target: ValidationTarget = "body") =
                     field: issue.path.join("."),
                     message: issue.message,
                 }));
+                const message = err.issues.map(i => i.message).join(", ");
                 return res.status(400).json({
-                    message: "Validation failed",
+                    message: message || "Validation failed",
                     errors,
                 });
             }

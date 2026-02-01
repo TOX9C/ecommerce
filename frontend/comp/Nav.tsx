@@ -1,15 +1,25 @@
 "use client";
 import Link from "next/link";
-import { ShoppingBag, User, LogOut, Shield } from "lucide-react";
+import { ShoppingBag, User, LogOut, Shield, Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const { user, isAdmin, logout } = useAuth();
   const { items } = useCart();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery(""); // Optional: clear after search or keep it
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,11 +31,10 @@ const Nav = () => {
 
   return (
     <div
-      className={`z-50 fixed w-full transition-all duration-300 ${
-        scrolled
+      className={`z-50 fixed w-full transition-all duration-300 ${scrolled
           ? "bg-white/80 backdrop-blur-xl border-b border-black/5 shadow-sm"
           : "bg-white/50 backdrop-blur-sm"
-      }`}
+        }`}
     >
       <div className="flex justify-between px-8 py-4 items-center max-w-7xl mx-auto">
         <Link href="/">
@@ -33,6 +42,19 @@ const Nav = () => {
             Store
           </p>
         </Link>
+
+        {/* Search Bar */}
+        <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64 focus-within:ring-2 focus-within:ring-[#0071e3] transition-all">
+          <Search size={18} className="text-gray-500 mr-2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
+            placeholder="Search..."
+            className="bg-transparent border-none outline-none text-sm text-gray-700 w-full placeholder-gray-500"
+          />
+        </div>
 
         <div className="flex gap-6 items-center">
           {/* Products Link */}

@@ -15,7 +15,7 @@ export const helmetMiddleware = helmet();
 // Rate limiter for authentication endpoints
 export const authRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 5 requests per windowMs
+    max: 100, // Increased limit for dev/debugging
     message: "Too many authentication attempts, please try again later",
     standardHeaders: true,
     legacyHeaders: false,

@@ -1,23 +1,34 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import api from "../../utils/api";
 import ItemsCard from "../../comp/ItemCard";
 import { Search, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 
-export default function ProductsPage() {
+const ProductsContent = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const initialSearch = searchParams.get("search") || "";
+
     const [products, setProducts] = useState<any[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Filter states
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(initialSearch);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [priceRange, setPriceRange] = useState({ min: "", max: "" });
     const [sortBy, setSortBy] = useState("newest");
 
     const [categories, setCategories] = useState<string[]>(["All"]);
+
+    // Update searchQuery if URL param changes
+    useEffect(() => {
+        const query = searchParams.get("search");
+        if (query) {
+            setSearchQuery(query);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -182,6 +193,7 @@ export default function ProductsPage() {
                                 setSelectedCategory("All");
                                 setPriceRange({ min: "", max: "" });
                                 setSortBy("newest");
+                                router.push("/products");
                             }}
                             className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                         >
@@ -213,5 +225,13 @@ export default function ProductsPage() {
                 </div>
             </div>
         </div>
+    );
+};
+
+export default function ProductsPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen pt-32 text-center">Loading...</div>}>
+            <ProductsContent />
+        </Suspense>
     );
 }

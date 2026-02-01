@@ -33,7 +33,7 @@ const ItemsCard = ({
       </div>
       <div className="flex flex-col mt-8">
         <p className="font-medium text-sm text-[#86868b]">{category}</p>
-        <p className="font-semibold text-xl text-[#1d1d1f] select-text">{name}</p>
+        <p className="font-semibold text-xl text-[#1d1d1f] select-text truncate" title={name}>{name}</p>
         <p className="select-text">${price}</p>
       </div>
       <div className="flex justify-between items-center duration-300 opacity-0 group-hover:opacity-100 mt-8">
