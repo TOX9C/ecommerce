@@ -10,7 +10,7 @@ A high-performance, aesthetically pleasing e-commerce application built with the
 *   **Seamless Shopping**: Guest checkout support, local storage cart synchronization, and optimized image loading.
 *   **Security**: Dual-method authentication (Username or Phone Number) with secure session management.
 
-![Landing Page](screenshots/user%20landding%20page.png)
+![Landing Page](screenshots/landing-page.png)
 
 ### Powerful Admin Suite
 *   **Dashboard**: Real-time overview of business performance and key metrics.
@@ -25,31 +25,35 @@ A high-performance, aesthetically pleasing e-commerce application built with the
 
 **Browse & Discover**  
 An intuitive product grid with effective filtering and sorting options.  
-![Product Page](screenshots/product%20page.png)
+![Products Grid](screenshots/products-grid.png)
+
+**Product Details**  
+Deep dive into product specifications with high-quality imagery.  
+![Single Product](screenshots/single-product.png)
 
 **Shopping Cart**  
 A clear, responsive cart view that manages items efficiently.  
-![Cart](screenshots/cart%20page.png)
+![Cart](screenshots/cart.png)
 
 **Secure Checkout**  
 Streamlined checkout process ensuring high conversion rates.  
-![Placing Order](screenshots/placing%20an%20order.png)
+![Placing Order](screenshots/checkout.png)
 
 ### Administrator Portal
 
 **Admin Dashboard**  
 A centralized hub for store management.  
-![Admin Dashboard](screenshots/admin%20lanndding%20page.png)
+![Admin Dashboard](screenshots/admin-dashboard.png)
 
 **Order Management**  
 View and manage customer orders with granular detail.  
-![Order Management](screenshots/order%20managment%20page.png)
-![Order Info](screenshots/order%20info.png)
+![Order Management](screenshots/order-management.png)
+![Order Info](screenshots/order-details.png)
 
 **Product Management**  
 Easily add and update inventory.  
-![Product Management](screenshots/product%20manegment%20page.png)
-![Adding Product](screenshots/adding%20a%20product.png)
+![Product Management](screenshots/product-management.png)
+![Adding Product](screenshots/adding-product.png)
 
 ---
 
