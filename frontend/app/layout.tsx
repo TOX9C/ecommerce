@@ -4,6 +4,7 @@ import Nav from "@/comp/Nav";
 import Footer from "@/comp/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import { usePathname } from "next/navigation";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
@@ -31,11 +32,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="bg-white/70 font-sans">
-        <AuthProvider>
-          <CartProvider>
-            <LayoutContent>{children}</LayoutContent>
-          </CartProvider>
-        </AuthProvider>
+        <CurrencyProvider>
+          <AuthProvider>
+            <CartProvider>
+              <LayoutContent>{children}</LayoutContent>
+            </CartProvider>
+          </AuthProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import CurrencySwitcher from "./CurrencySwitcher";
 
 const Nav = () => {
   const { user, isAdmin, logout } = useAuth();
@@ -63,6 +64,9 @@ const Nav = () => {
               Products
             </button>
           </Link>
+
+          {/* Currency Switcher */}
+          <CurrencySwitcher />
 
           {/* Cart */}
           <Link href="/cart">

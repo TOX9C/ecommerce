@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import api from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 interface ProductFormProps {
     initialData?: {
@@ -33,6 +34,7 @@ const PRESET_CATEGORIES = [
 export default function ProductForm({ initialData, isEdit = false }: ProductFormProps) {
     const router = useRouter();
     const { user, isAdmin } = useAuth();
+    const { exchangeRate } = useCurrency();
     const [formData, setFormData] = useState({
         name: "",
         category: "",
@@ -42,6 +44,7 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
     const [imageUrls, setImageUrls] = useState<string[]>([""]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [customCategory, setCustomCategory] = useState("");
+    const [selectedCurrency, setSelectedCurrency] = useState<"USD" | "IQD">("USD");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -101,10 +104,16 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
                 return;
             }
 
+            // Convert price to USD if entered in IQD
+            let priceInUSD = parseFloat(formData.price);
+            if (selectedCurrency === "IQD") {
+                priceInUSD = priceInUSD / exchangeRate;
+            }
+
             const payload = {
                 ...formData,
                 category: finalCategory,
-                price: parseFloat(formData.price),
+                price: Math.round(priceInUSD * 100) / 100, // Round to 2 decimal places
                 imgUrl: validUrls,
                 ...(isEdit && initialData?.id ? { id: initialData.id } : {}),
             };
@@ -178,18 +187,38 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
                         )}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                        <input
-                            type="number"
-                            required
-                            min="0"
-                            step="0.01"
-                            value={formData.price}
-                            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Currency</label>
+                        <select
+                            value={selectedCurrency}
+                            onChange={(e) => setSelectedCurrency(e.target.value as "USD" | "IQD")}
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                            placeholder="0.00"
-                        />
+                        >
+                            <option value="USD">USD ($)</option>
+                            <option value="IQD">IQD (Iraqi Dinar)</option>
+                        </select>
                     </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Price ({selectedCurrency})</label>
+                    <input
+                        type="number"
+                        required
+                        min="0"
+                        step={selectedCurrency === "USD" ? "0.01" : "1"}
+                        value={formData.price}
+                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                        placeholder={selectedCurrency === "USD" ? "0.00" : "0"}
+                    />
+                    {formData.price && parseFloat(formData.price) > 0 && (
+                        <p className="text-sm text-gray-500 mt-1">
+                            ≈ {selectedCurrency === "USD"
+                                ? `${Math.round(parseFloat(formData.price) * exchangeRate).toLocaleString()} IQD`
+                                : `$${(parseFloat(formData.price) / exchangeRate).toFixed(2)} USD`
+                            }
+                        </p>
+                    )}
                 </div>
 
                 <div>

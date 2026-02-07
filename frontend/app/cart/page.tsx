@@ -1,6 +1,7 @@
 "use client";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import Link from "next/link";
 import Image from "next/image";
 import { Trash2, Minus, Plus } from "lucide-react";
@@ -9,6 +10,7 @@ import Skeleton from "@/comp/Skeleton";
 export default function CartPage() {
     const { items, removeFromCart, addToCart, total, clearCart, isLoading } = useCart();
     const { user } = useAuth();
+    const { formatPrice } = useCurrency();
 
     if (isLoading) {
         return (
@@ -68,7 +70,7 @@ export default function CartPage() {
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="text-2xl font-semibold text-[#1d1d1f]">{item.product?.name}</h3>
                                     <p className="text-xl font-medium text-[#1d1d1f]">
-                                        ${((item.product?.price || 0) * item.quantity).toFixed(2)}
+                                        {formatPrice((item.product?.price || 0) * item.quantity)}
                                     </p>
                                 </div>
                                 <p className="text-gray-500 mb-4">{item.product?.category || "Category"}</p>
@@ -104,7 +106,7 @@ export default function CartPage() {
                 <div className="flex flex-col items-end gap-4 mb-20">
                     <div className="flex justify-between w-full md:w-1/3 text-xl font-medium border-t border-gray-300 pt-4">
                         <span>Total</span>
-                        <span>${total.toFixed(2)}</span>
+                        <span>{formatPrice(total)}</span>
                     </div>
 
                     <div className="flex gap-4 w-full md:w-auto mt-4">

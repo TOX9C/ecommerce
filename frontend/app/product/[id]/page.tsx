@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import api from "@/utils/api";
 import { useCart } from "@/context/CartContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 
 export default function ProductPage() {
@@ -11,6 +12,7 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ export default function ProductPage() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1d1d1f] mb-4 tracking-tight">
             {product.name}
           </h1>
-          <p className="text-2xl md:text-3xl font-medium text-[#1d1d1f] mb-8">${product.price}</p>
+          <p className="text-2xl md:text-3xl font-medium text-[#1d1d1f] mb-8">{formatPrice(product.price)}</p>
 
           <div className="prose prose-lg text-gray-500 mb-10">
             <p>{product.description}</p>
