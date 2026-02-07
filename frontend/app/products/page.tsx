@@ -99,12 +99,12 @@ const ProductsContent = () => {
     if (loading) return <div className="min-h-screen pt-32 text-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7]">
+        <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7] page-transition">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f] mb-8 select-none">Browse Products</h1>
+                <h1 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f] mb-8 select-none animate-fade-in-up">Browse Products</h1>
 
                 {/* Filters Section */}
-                <div className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200 mb-8 select-none">
+                <div className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200 mb-8 select-none animate-fade-in-up animate-delay-100">
                     <div className="flex items-center gap-2 mb-4">
                         <SlidersHorizontal size={20} className="text-gray-600" />
                         <h2 className="text-lg font-semibold text-[#1d1d1f]">Filters & Sorting</h2>
@@ -210,15 +210,20 @@ const ProductsContent = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {filteredProducts.map((product) => (
-                                <ItemsCard
+                            {filteredProducts.map((product, index) => (
+                                <div
                                     key={product.id}
-                                    id={product.id}
-                                    name={product.name}
-                                    price={product.price}
-                                    category={product.category}
-                                    ProductImages={product.ProductImages}
-                                />
+                                    className="animate-fade-in-up"
+                                    style={{ animationDelay: `${Math.min(index * 0.05, 0.5)}s` }}
+                                >
+                                    <ItemsCard
+                                        id={product.id}
+                                        name={product.name}
+                                        price={product.price}
+                                        category={product.category}
+                                        ProductImages={product.ProductImages}
+                                    />
+                                </div>
                             ))}
                         </div>
                     )}

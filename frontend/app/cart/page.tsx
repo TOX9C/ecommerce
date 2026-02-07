@@ -36,11 +36,11 @@ export default function CartPage() {
 
     if (items.length === 0) {
         return (
-            <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7] flex flex-col items-center justify-center">
-                <h1 className="text-3xl font-semibold mb-4 text-[#1d1d1f]">Your bag is empty.</h1>
-                <p className="text-gray-500 mb-8">Free delivery and free returns.</p>
+            <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7] flex flex-col items-center justify-center page-transition">
+                <h1 className="text-3xl font-semibold mb-4 text-[#1d1d1f] animate-fade-in-up">Your bag is empty.</h1>
+                <p className="text-gray-500 mb-8 animate-fade-in-up animate-delay-100">Free delivery and free returns.</p>
                 <Link href="/">
-                    <button className="bg-[#0071e3] hover:bg-[#0077ed] text-white px-8 py-3 rounded-full font-medium transition-all">
+                    <button className="bg-[#0071e3] hover:bg-[#0077ed] text-white px-8 py-3 rounded-full font-medium btn-animate animate-fade-in-up animate-delay-200">
                         Continue Shopping
                     </button>
                 </Link>
@@ -49,11 +49,11 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7]">
+        <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7] page-transition">
             <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-12 text-[#1d1d1f] text-center">Review your bag.</h1>
+                <h1 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-12 text-[#1d1d1f] text-center animate-fade-in-up">Review your bag.</h1>
 
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm mb-8">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm mb-8 animate-fade-in-up animate-delay-100">
                     {items.map((item) => (
                         <div key={item.productId} className="flex flex-col md:flex-row items-center gap-6 p-8 border-b border-gray-100 last:border-0">
                             <div className="w-32 h-32 relative">

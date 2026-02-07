@@ -32,7 +32,7 @@ const Nav = () => {
 
   return (
     <div
-      className={`z-50 fixed w-full transition-all duration-300 ${scrolled
+      className={`z-50 fixed w-full transition-all duration-300 animate-fade-in-down ${scrolled
         ? "bg-white/80 backdrop-blur-xl border-b border-black/5 shadow-sm"
         : "bg-white/50 backdrop-blur-sm"
         }`}
