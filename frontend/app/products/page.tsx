@@ -99,7 +99,7 @@ const ProductsContent = () => {
     if (loading) return <div className="min-h-screen pt-32 text-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7]">
+        <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7]">
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f] mb-8 select-none">Browse Products</h1>
 

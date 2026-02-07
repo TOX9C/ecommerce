@@ -48,7 +48,7 @@ const Home = () => {
           </button>
         </div>
       </div>
-      <div className="bg-[#f5f5f7] flex flex-col p-4 md:p-10 min-h-screen select-none">
+      <div className="bg-[#f5f5f7] flex flex-col p-4 md:p-10 pb-16 min-h-screen select-none">
         <div>
           <p className="font-semibold text-2xl md:text-3xl my-6 md:my-8 ml-2 md:ml-5">
             The Latest Arrivals

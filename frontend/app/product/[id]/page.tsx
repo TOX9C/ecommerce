@@ -43,7 +43,7 @@ export default function ProductPage() {
   if (!product) return <div className="min-h-screen pt-32 text-center">Product not found</div>;
 
   return (
-    <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7] flex justify-center">
+    <div className="min-h-screen pt-32 px-4 md:px-6 pb-16 bg-[#f5f5f7] flex justify-center">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Image Section */}
         <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center h-fit select-none">
