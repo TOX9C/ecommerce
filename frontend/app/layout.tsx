@@ -1,6 +1,7 @@
 "use client";
 import "./globals.css";
 import Nav from "@/comp/Nav";
+import Footer from "@/comp/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { usePathname } from "next/navigation";
@@ -8,12 +9,14 @@ import { usePathname } from "next/navigation";
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hideNav = pathname?.startsWith("/auth");
+  const hideFooter = pathname?.startsWith("/auth") || pathname?.startsWith("/admin");
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       {!hideNav && <Nav />}
-      {children}
-    </>
+      <main className="flex-1">{children}</main>
+      {!hideFooter && <Footer />}
+    </div>
   );
 }
 
