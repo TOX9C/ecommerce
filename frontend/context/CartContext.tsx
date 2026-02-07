@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import api from "../utils/api";
-import { useAuth } from "./AuthContext";
+import { getProducts } from "../utils/mockData";
 
 export interface CartItem {
     id?: number;
@@ -28,117 +27,129 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const { user, token } = useAuth();
     const [items, setItems] = useState<CartItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Load local cart on mount
+    // Load cart from localStorage on mount
     useEffect(() => {
-        if (!user) {
-            const localCart = localStorage.getItem("cart");
-            if (localCart) {
-                setItems(JSON.parse(localCart));
+        const loadCart = () => {
+            if (typeof window === 'undefined') return;
+
+            const cartStr = localStorage.getItem('mock_cart');
+            if (cartStr) {
+                try {
+                    const cartItems = JSON.parse(cartStr);
+                    const products = getProducts();
+
+                    // Populate product details from mock data
+                    const itemsWithDetails = cartItems.map((item: any) => {
+                        const product = products.find(p => p.id === item.productId);
+                        return {
+                            productId: item.productId,
+                            quantity: item.quantity,
+                            product: product ? {
+                                name: product.name,
+                                price: product.price,
+                                category: product.category,
+                                ProductImages: product.ProductImages
+                            } : null
+                        };
+                    });
+
+                    setItems(itemsWithDetails);
+                } catch (e) {
+                    console.error('Failed to load cart', e);
+                }
             }
-        }
-    }, [user]);
+        };
 
-    // Sync with backend when user logs in
-    useEffect(() => {
-        if (user && token) {
-            syncCart();
-        }
-    }, [user, token]);
+        loadCart();
+    }, []);
 
-    const syncCart = async () => {
+    const addToCart = async (productId: number, quantity: number) => {
         setIsLoading(true);
         try {
-            // 1. Get backend cart
-            const res = await api.get("/cart");
-            const backendItems = res.data.items.map((item: any) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                product: item.product
-            }));
+            const products = getProducts();
+            const product = products.find(p => p.id === productId);
 
-            // 2. Merge local items if any
-            const localCartStr = localStorage.getItem("cart");
-            if (localCartStr) {
-                const localItems: CartItem[] = JSON.parse(localCartStr);
-                for (const localItem of localItems) {
-                    // Determine if we need to add to backend
-                    // For simplicity, just add them one by one. 
-                    // In a real app, we'd batch this or check existence.
-                    await api.post("/cart/add", { id: localItem.productId, quantity: localItem.quantity });
-                }
-                localStorage.removeItem("cart");
-                // Re-fetch to get updated state
-                const updatedRes = await api.get("/cart");
-                setItems(updatedRes.data.items.map((item: any) => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    product: item.product
-                })));
-            } else {
-                setItems(backendItems);
+            if (!product) {
+                throw new Error('Product not found');
             }
+
+            setItems(prev => {
+                const existing = prev.find(i => i.productId === productId);
+                let newItems;
+
+                if (existing) {
+                    newItems = prev.map(i =>
+                        i.productId === productId
+                            ? { ...i, quantity: i.quantity + quantity }
+                            : i
+                    );
+                } else {
+                    newItems = [
+                        ...prev,
+                        {
+                            productId,
+                            quantity,
+                            product: {
+                                name: product.name,
+                                price: product.price,
+                                category: product.category,
+                                ProductImages: product.ProductImages
+                            }
+                        }
+                    ];
+                }
+
+                // Save to localStorage
+                localStorage.setItem('mock_cart', JSON.stringify(
+                    newItems.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                    }))
+                ));
+
+                return newItems;
+            });
         } catch (error) {
-            console.error("Failed to sync cart", error);
+            console.error('Add to cart error', error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const addToCart = async (productId: number, quantity: number) => {
-        if (user) {
-            try {
-                await api.post("/cart/add", { id: productId, quantity });
-                // Optimistic update or refetch
-                syncCart();
-            } catch (error) {
-                console.error("Add to cart error", error);
-            }
-        } else {
-            setItems(prev => {
-                const existing = prev.find(i => i.productId === productId);
-                let newItems;
-                if (existing) {
-                    newItems = prev.map(i => i.productId === productId ? { ...i, quantity: i.quantity + quantity } : i);
-                } else {
-                    newItems = [...prev, { productId, quantity }];
-                }
-                localStorage.setItem("cart", JSON.stringify(newItems));
-                return newItems;
-            });
-        }
-    };
-
     const removeFromCart = async (productId: number) => {
-        if (user) {
-            try {
-                await api.post("/cart/remove", { id: productId });
-                syncCart();
-            } catch (e) {
-                console.error(e);
-            }
-        } else {
+        setIsLoading(true);
+        try {
             setItems(prev => {
                 const newItems = prev.filter(i => i.productId !== productId);
-                localStorage.setItem("cart", JSON.stringify(newItems));
+
+                // Save to localStorage
+                localStorage.setItem('mock_cart', JSON.stringify(
+                    newItems.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                    }))
+                ));
+
                 return newItems;
             });
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const clearCart = () => {
         setItems([]);
-        if (!user) {
-            localStorage.removeItem("cart");
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('mock_cart');
         }
     };
 
     const total = items.reduce((acc, item) => {
-        // Note: Product price might not be available in local cart if we don't store it.
-        // We should probably store product details in local cart too.
         return acc + (item.quantity * (item.product?.price || 0));
     }, 0);
 

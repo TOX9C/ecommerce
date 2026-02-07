@@ -56,17 +56,18 @@ export default function AdminDashboard() {
     if (!isAdmin) return null;
 
     return (
-        <div className="min-h-screen pt-32 px-10 bg-[#f5f5f7]">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-4xl font-semibold text-[#1d1d1f]">Product Management</h1>
-                <Link href="/admin/product/new">
-                    <button className="flex items-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 py-2 rounded-full font-medium transition-all">
+        <div className="min-h-screen pt-32 px-4 md:px-10 bg-[#f5f5f7]">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+                <h1 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f]">Product Management</h1>
+                <Link href="/admin/product/new" className="w-full md:w-auto">
+                    <button className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 py-2 rounded-full font-medium transition-all">
                         <Plus size={18} /> Add Product
                     </button>
                 </Link>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+            {/* Desktop Table View */}
+            <div className="hidden md:block bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
                 <table className="w-full text-left">
                     <thead>
                         <tr className="border-b border-gray-100 text-[#86868b]">
@@ -109,6 +110,39 @@ export default function AdminDashboard() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+                {products.map((product) => (
+                    <div key={product.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
+                        <div className="flex gap-4 mb-4">
+                            <img
+                                src={product.ProductImages?.[0]?.url || "https://dummyimage.com/50x50/ccc/000.png&text=X"}
+                                alt={product.name}
+                                className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-[#1d1d1f] text-lg mb-1 truncate">{product.name}</h3>
+                                <p className="text-sm text-[#86868b] mb-2">{product.category}</p>
+                                <p className="text-lg font-medium text-[#1d1d1f]">${product.price}</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-2 pt-3 border-t border-gray-100">
+                            <Link href={`/admin/product/${product.id}`} className="flex-1">
+                                <button className="w-full flex items-center justify-center gap-2 p-2.5 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all font-medium text-sm">
+                                    <Edit size={16} /> Edit
+                                </button>
+                            </Link>
+                            <button
+                                onClick={() => handleDelete(product.id)}
+                                className="flex-1 flex items-center justify-center gap-2 p-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-all font-medium text-sm"
+                            >
+                                <Trash2 size={16} /> Delete
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

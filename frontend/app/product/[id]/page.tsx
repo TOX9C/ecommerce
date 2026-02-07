@@ -43,11 +43,11 @@ export default function ProductPage() {
   if (!product) return <div className="min-h-screen pt-32 text-center">Product not found</div>;
 
   return (
-    <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7] flex justify-center">
-      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7] flex justify-center">
+      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Image Section */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm flex flex-col items-center justify-center h-fit select-none">
-          <div className="w-full max-w-md h-96 flex items-center justify-center mb-4">
+        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center h-fit select-none">
+          <div className="w-full max-w-md h-64 md:h-96 flex items-center justify-center mb-4">
             <img
               src={product.ProductImages?.[0]?.url || "https://dummyimage.com/600x600/ccc/000.png&text=Product+Image"}
               alt={product.name}
@@ -75,10 +75,10 @@ export default function ProductPage() {
         {/* Details Section */}
         <div className="flex flex-col justify-center select-none">
           <span className="text-orange-600 font-semibold mb-2">{product.category}</span>
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1d1d1f] mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1d1d1f] mb-4 tracking-tight">
             {product.name}
           </h1>
-          <p className="text-3xl font-medium text-[#1d1d1f] mb-8">${product.price}</p>
+          <p className="text-2xl md:text-3xl font-medium text-[#1d1d1f] mb-8">${product.price}</p>
 
           <div className="prose prose-lg text-gray-500 mb-10">
             <p>{product.description}</p>

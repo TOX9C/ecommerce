@@ -48,13 +48,13 @@ export default function CheckoutPage() {
     }
 
     return (
-        <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7] flex justify-center pb-20">
-            <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7] flex justify-center pb-20">
+            <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 {/* Left Col: Auth or Shipping Info (Mocked) */}
                 <div>
                     {!user ? (
                         <div>
-                            <h2 className="text-2xl font-semibold mb-6">{authMode === 'login' ? 'Sign In' : 'Create Account'} to Checkout</h2>
+                            <h2 className="text-xl md:text-2xl font-semibold mb-6">{authMode === 'login' ? 'Sign In' : 'Create Account'} to Checkout</h2>
                             <AuthForm mode={authMode} isInline={true} />
                             <div className="mt-4 text-center text-sm">
                                 {authMode === 'login' ? (
@@ -83,8 +83,8 @@ export default function CheckoutPage() {
 
                 {/* Right Col: Order Summary */}
                 <div>
-                    <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 sticky top-32">
-                        <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
+                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200 sticky top-32">
+                        <h2 className="text-xl md:text-2xl font-semibold mb-6">Order Summary</h2>
                         <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
                             {items.map(item => (
                                 <div key={item.productId} className="flex justify-between items-start">

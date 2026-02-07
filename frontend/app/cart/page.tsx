@@ -47,9 +47,9 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7]">
+        <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7]">
             <div className="max-w-4xl mx-auto">
-                <h1 className="text-4xl font-semibold mb-12 text-[#1d1d1f] text-center">Review your bag.</h1>
+                <h1 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-12 text-[#1d1d1f] text-center">Review your bag.</h1>
 
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm mb-8">
                     {items.map((item) => (

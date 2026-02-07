@@ -99,12 +99,12 @@ const ProductsContent = () => {
     if (loading) return <div className="min-h-screen pt-32 text-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen pt-32 px-6 bg-[#f5f5f7]">
+        <div className="min-h-screen pt-32 px-4 md:px-6 bg-[#f5f5f7]">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-4xl font-semibold text-[#1d1d1f] mb-8 select-none">Browse Products</h1>
+                <h1 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f] mb-8 select-none">Browse Products</h1>
 
                 {/* Filters Section */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 mb-8 select-none">
+                <div className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200 mb-8 select-none">
                     <div className="flex items-center gap-2 mb-4">
                         <SlidersHorizontal size={20} className="text-gray-600" />
                         <h2 className="text-lg font-semibold text-[#1d1d1f]">Filters & Sorting</h2>

@@ -32,13 +32,13 @@ const Nav = () => {
   return (
     <div
       className={`z-50 fixed w-full transition-all duration-300 ${scrolled
-          ? "bg-white/80 backdrop-blur-xl border-b border-black/5 shadow-sm"
-          : "bg-white/50 backdrop-blur-sm"
+        ? "bg-white/80 backdrop-blur-xl border-b border-black/5 shadow-sm"
+        : "bg-white/50 backdrop-blur-sm"
         }`}
     >
-      <div className="flex justify-between px-8 py-4 items-center max-w-7xl mx-auto">
+      <div className="flex justify-between px-4 md:px-8 py-4 items-center max-w-7xl mx-auto">
         <Link href="/">
-          <p className="text-2xl font-bold text-[#1d1d1f] tracking-tight cursor-pointer hover:text-[#0071e3] transition-colors">
+          <p className="text-xl md:text-2xl font-bold text-[#1d1d1f] tracking-tight cursor-pointer hover:text-[#0071e3] transition-colors">
             Store
           </p>
         </Link>
@@ -56,7 +56,7 @@ const Nav = () => {
           />
         </div>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-3 md:gap-6 items-center">
           {/* Products Link */}
           <Link href="/products">
             <button className="text-sm font-medium text-gray-700 hover:text-[#0071e3] transition-colors">
