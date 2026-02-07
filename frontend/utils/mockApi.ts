@@ -325,21 +325,38 @@ export const mockApi = {
                 : orders.filter(o => o.userId === user.id);
 
             // Populate product details
-            const ordersWithDetails = userOrders.map(order => ({
-                ...order,
-                items: order.items.map(item => {
-                    const product = products.find(p => p.id === item.productId);
-                    return {
-                        ...item,
-                        product: product ? {
-                            name: product.name,
-                            price: product.price,
-                            ProductImages: product.ProductImages
-                        } : { name: item.productName, price: item.price, ProductImages: [] }
-                    };
-                }),
-                user: mockUsers.find(u => u.id === order.userId)
-            }));
+            const ordersWithDetails = userOrders.map(order => {
+                const orderUser = mockUsers.find(u => u.id === order.userId);
+                return {
+                    ...order,
+                    items: order.items.map(item => {
+                        const product = products.find(p => p.id === item.productId);
+                        return {
+                            ...item,
+                            product: product ? {
+                                name: product.name,
+                                price: product.price,
+                                ProductImages: product.ProductImages
+                            } : { name: item.productName, price: item.price, ProductImages: [] }
+                        };
+                    }),
+                    user: orderUser ? {
+                        username: orderUser.username,
+                        email: orderUser.email,
+                        phoneNumber: '',
+                        street: '',
+                        city: '',
+                        town: ''
+                    } : {
+                        username: 'Unknown User',
+                        email: '',
+                        phoneNumber: '',
+                        street: '',
+                        city: '',
+                        town: ''
+                    }
+                };
+            });
 
             return {
                 data: {

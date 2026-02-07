@@ -9,7 +9,7 @@ export default function EditProductPage() {
     const { isAdmin, isLoading } = useAuth();
     const router = useRouter();
     const params = useParams();
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState<any>(null);
     const [fetching, setFetching] = useState(true);
 
     useEffect(() => {
